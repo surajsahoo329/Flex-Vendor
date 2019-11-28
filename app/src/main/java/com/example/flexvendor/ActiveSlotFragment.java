@@ -37,8 +37,7 @@ import java.util.List;
 
 public class ActiveSlotFragment extends Fragment {
 
-    private String checkMail, uEmail, vEmail, name, phone;
-    private FirebaseUser vendUser;
+    private String checkMail, vEmail, name, phone;
     private ListView activeListViewSlot;
     private int companyID;
 
@@ -61,7 +60,7 @@ public class ActiveSlotFragment extends Fragment {
 
         final ProgressDialog pd  = ProgressDialog.show(refActivity,"Loading slots","Please wait...",true);
 
-        vendUser= FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser vendUser=FirebaseAuth.getInstance().getCurrentUser();
         assert vendUser != null;
         checkMail = vendUser.getEmail();
         assert refActivity != null;
@@ -265,6 +264,7 @@ public class ActiveSlotFragment extends Fragment {
                                                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                                         String inLoopEmail=ds.child("userMail").getValue(String.class);
 
+                                                        assert email != null;
                                                         if (email.equals(inLoopEmail)) {
 
                                                             char[] dateArr=date.toCharArray();
@@ -302,10 +302,7 @@ public class ActiveSlotFragment extends Fragment {
 
                                 }
 
-                                CustomListViewAdapter adapter = new CustomListViewAdapter(refActivity,
-                                        R.layout.list_slot, users);
-                                activeListViewSlot.setAdapter(adapter);
-                                pd.dismiss();
+
                             }
 
                             @Override
@@ -317,6 +314,12 @@ public class ActiveSlotFragment extends Fragment {
                     }
                 }
 
+                CustomListViewAdapter adapter=new CustomListViewAdapter(refActivity,
+                        R.layout.list_slot, users);
+                activeListViewSlot.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                pd.dismiss();
+
             }
 
             @Override
@@ -324,8 +327,6 @@ public class ActiveSlotFragment extends Fragment {
 
             }
         });
-
-
 
 
         return parentHolder;

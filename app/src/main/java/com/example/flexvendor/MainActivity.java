@@ -193,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             openSlots=extras.getBoolean("openSlots");
         if (openSlots) {
 
-            frameLayout.setVisibility(View.GONE);
             viewPager.setVisibility(View.VISIBLE);
             tabLayout.setVisibility(View.VISIBLE);
             TabAdapter adapter=new TabAdapter(getSupportFragmentManager());
@@ -289,7 +288,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId()) {
 
             case R.id.nav_slots:
-                frameLayout.setVisibility(View.GONE);
                 viewPager.setVisibility(View.VISIBLE);
                 tabLayout.setVisibility(View.VISIBLE);
                 TabAdapter adapter=new TabAdapter(getSupportFragmentManager());
