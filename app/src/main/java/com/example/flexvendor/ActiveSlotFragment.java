@@ -210,20 +210,6 @@ public class ActiveSlotFragment extends Fragment {
 
                                                 } else {
 
-                                                    char[] dateArr=date.toCharArray();
-                                                    final char[] modDateArr=new char[date.length()];
-                                                    int count=0;
-
-                                                    for (int i=0; i < dateArr.length; i++) {
-                                                        if (dateArr[i] == '-')
-                                                            count++;
-                                                        if (count == 2)
-                                                            break;
-
-                                                        modDateArr[i]=dateArr[i];
-                                                    }
-
-
                                                     userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                                         @Override
                                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -234,9 +220,21 @@ public class ActiveSlotFragment extends Fragment {
 
                                                                 if(email.equals(inLoopEmail))
                                                                 {
+
+                                                                    char[] dateArr=date.toCharArray();
+                                                                    char[] modDateArr=new char[date.length()];
+                                                                    int count=0;
+
+                                                                    for (int i=0; i < dateArr.length; i++) {
+                                                                        if (dateArr[i] == '-')
+                                                                            count++;
+                                                                        if (count == 2)
+                                                                            break;
+
+                                                                        modDateArr[i]=dateArr[i];
+                                                                    }
                                                                     name = ds.child("userName").getValue(String.class);
                                                                     phone = ds.child("userPhone").getValue(String.class);
-
                                                                     String modTime=String.valueOf(modDateArr) + ", " + stTime + " | " + hours;
                                                                     Users item = new Users(email,name,phone,modTime);
                                                                     users.add(item);
@@ -253,27 +251,50 @@ public class ActiveSlotFragment extends Fragment {
                                                     });
 
                                                 }
+                                            } else {
+                                                //Date passed code
                                             }
 
                                         }
                                         else {
 
-                                            char[] dateArr=date.toCharArray();
-                                            char[] modDateArr=new char[date.length()];
-                                            int count=0;
+                                            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                            for (int i=0; i < dateArr.length; i++) {
-                                                if (dateArr[i] == '-')
-                                                    count++;
-                                                if (count == 2)
-                                                    break;
+                                                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                                        String inLoopEmail=ds.child("userMail").getValue(String.class);
 
-                                                modDateArr[i]=dateArr[i];
-                                            }
+                                                        if (email.equals(inLoopEmail)) {
 
-                                            String modTime=String.valueOf(modDateArr) + ", " + stTime + " | " + hours;
-                                            Users item = new Users(email,name,phone,modTime);
-                                            users.add(item);
+                                                            char[] dateArr=date.toCharArray();
+                                                            char[] modDateArr=new char[date.length()];
+                                                            int count=0;
+
+                                                            for (int i=0; i < dateArr.length; i++) {
+                                                                if (dateArr[i] == '-')
+                                                                    count++;
+                                                                if (count == 2)
+                                                                    break;
+
+                                                                modDateArr[i]=dateArr[i];
+                                                            }
+                                                            name=ds.child("userName").getValue(String.class);
+                                                            phone=ds.child("userPhone").getValue(String.class);
+                                                            String modTime=String.valueOf(modDateArr) + ", " + stTime + " | " + hours;
+                                                            Users item=new Users(email, name, phone, modTime);
+                                                            users.add(item);
+                                                        }
+
+                                                    }
+
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                }
+                                            });
                                         }
 
 
