@@ -9,14 +9,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -41,9 +39,7 @@ public class ActiveSlotFragment extends Fragment {
 
     private String checkMail, uEmail, vEmail, name, phone;
     private FirebaseUser vendUser;
-    private ImageView ivUser;
     private ListView activeListViewSlot;
-    private Slot activeSlot;
     private int companyID;
 
     private List<Users> users;
@@ -70,7 +66,6 @@ public class ActiveSlotFragment extends Fragment {
         checkMail = vendUser.getEmail();
         assert refActivity != null;
 
-        ivUser=parentHolder.findViewById(R.id.ivImage);
         activeListViewSlot=parentHolder.findViewById(R.id.activeListViewSlot);
         users=new ArrayList<>();
 
@@ -79,7 +74,6 @@ public class ActiveSlotFragment extends Fragment {
         final DatabaseReference ref = database.getReference("Slot");
         final DatabaseReference vendRef = database.getReference("Vendor");
         final DatabaseReference userRef = database.getReference("User");
-        activeListViewSlot.setVisibility(View.GONE);
 
         vendRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

@@ -37,7 +37,7 @@ public class CustomListViewAdapter extends ArrayAdapter<Users> {
     @NonNull
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         ViewHolder holder;
-        Users users=  getItem(position);
+        Users users=getItem(position);
 
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);

@@ -49,8 +49,6 @@ public class Users {
         this.timings=timings;
     }
 
-
-
     @NonNull
     @Override
     public String toString() {
