@@ -4,12 +4,15 @@ package com.example.flexvendor;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -243,7 +246,6 @@ public class ActiveSlotFragment extends Fragment {
                                                                     users.add(item);
                                                                     adapter=new CustomListViewAdapter(refActivity, R.layout.list_slot, users);
                                                                     activeListViewSlot.setAdapter(adapter);
-                                                                    adapter.notifyDataSetChanged();
                                                                 }
 
                                                             }
@@ -302,7 +304,6 @@ public class ActiveSlotFragment extends Fragment {
                                                             users.add(item);
                                                             adapter=new CustomListViewAdapter(refActivity, R.layout.list_slot, users);
                                                             activeListViewSlot.setAdapter(adapter);
-                                                            adapter.notifyDataSetChanged();
                                                         }
 
                                                     }
@@ -343,8 +344,22 @@ public class ActiveSlotFragment extends Fragment {
             }
         });
 
+        activeListViewSlot.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                TextView textView=view.findViewById(R.id.invisibleEmail);
+                String getMailFromList=textView.getText().toString();
+                Intent it=new Intent(getActivity(), LicenseDetailsActivity.class);
+                it.putExtra("email", getMailFromList);
+                startActivity(it);
+
+            }
+        });
+
 
         return parentHolder;
     }
+
 
 }

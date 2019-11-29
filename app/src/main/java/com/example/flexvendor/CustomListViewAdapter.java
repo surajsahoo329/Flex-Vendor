@@ -34,15 +34,7 @@ public class CustomListViewAdapter extends ArrayAdapter<Users> {
         this.context = context;
     }
 
-    /*private view holder class*/
-    private class ViewHolder {
-        ImageView imageView;
-        TextView txtName;
-        TextView txtPhone;
-        TextView txtTimings;
-    }
-
-    @SuppressLint("InflateParams")
+    @SuppressLint({"InflateParams", "SetTextI18n"})
     @NonNull
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
@@ -57,6 +49,7 @@ public class CustomListViewAdapter extends ArrayAdapter<Users> {
             holder.txtName=convertView.findViewById(R.id.tvUserName);
             holder.txtPhone=convertView.findViewById(R.id.tvUserPhone);
             holder.txtTimings=convertView.findViewById(R.id.tvTimings);
+            holder.txtEmail=convertView.findViewById(R.id.invisibleEmail);
             holder.imageView=convertView.findViewById(R.id.ivImage);
             convertView.setTag(holder);
         } else
@@ -64,8 +57,9 @@ public class CustomListViewAdapter extends ArrayAdapter<Users> {
 
         assert users != null;
         holder.txtName.setText(users.getName());
-        holder.txtPhone.setText(users.getPhone());
+        holder.txtPhone.setText("+91-" + users.getPhone());
         holder.txtTimings.setText(users.getTimings());
+        holder.txtEmail.setText(users.getEmail());
         String sendEmail=users.getEmail();
         final StorageReference mStorageRef=FirebaseStorage.getInstance().getReference();
         final StorageReference imgRef=mStorageRef.child(sendEmail + "/photo.jpg");
@@ -107,6 +101,15 @@ public class CustomListViewAdapter extends ArrayAdapter<Users> {
 
 
         return convertView;
+    }
+
+    /*private view holder class*/
+    private class ViewHolder {
+        ImageView imageView;
+        TextView txtEmail;
+        TextView txtName;
+        TextView txtPhone;
+        TextView txtTimings;
     }
 
 
