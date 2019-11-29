@@ -74,8 +74,8 @@ public class ActiveSlotFragment extends Fragment {
 
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference ref = database.getReference("Slot");
         final DatabaseReference vendRef = database.getReference("Vendor");
+        final DatabaseReference slotRef=database.getReference("Slot");
         final DatabaseReference userRef = database.getReference("User");
 
         vendRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -90,7 +90,7 @@ public class ActiveSlotFragment extends Fragment {
 
                         companyID=ds.child("companyID").getValue(Integer.class);
 
-                        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        slotRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @SuppressLint("SetTextI18n")
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -245,6 +245,7 @@ public class ActiveSlotFragment extends Fragment {
                                                                     Users item = new Users(email,name,phone,modTime);
                                                                     users.add(item);
                                                                     adapter=new CustomListViewAdapter(refActivity, R.layout.list_slot, users);
+                                                                    adapter.notifyDataSetChanged();
                                                                     activeListViewSlot.setAdapter(adapter);
                                                                 }
 
@@ -303,6 +304,7 @@ public class ActiveSlotFragment extends Fragment {
                                                             Users item=new Users(email, name, phone, modTime);
                                                             users.add(item);
                                                             adapter=new CustomListViewAdapter(refActivity, R.layout.list_slot, users);
+                                                            adapter.notifyDataSetChanged();
                                                             activeListViewSlot.setAdapter(adapter);
                                                         }
 
@@ -331,8 +333,10 @@ public class ActiveSlotFragment extends Fragment {
                             }
 
                         });
+
                     }
                 }
+
 
                 pd.dismiss();
 
