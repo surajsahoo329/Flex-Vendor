@@ -122,5 +122,6 @@
     <string name="company_id">Company ID</string>
     <string name="slots">Slots</string>
     <string name="users">Company</string>
+    <string name="courier">Courier</string>
 </resources>
 

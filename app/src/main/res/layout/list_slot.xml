@@ -13,85 +13,75 @@
         card_view:cardCornerRadius="4dp">
 
 
-        <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+        <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
             android:background="@drawable/multilinetext_bg"
-    android:padding="20dp"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/view2"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="center"
-        android:innerRadius="0dp"
-        android:shape="ring"
-        android:thicknessRatio="1.9"
-        app:cardCornerRadius="10dp"
-        app:strokeColor="#000"
-        app:strokeWidth="@dimen/cardview_compat_inset_shadow"
-        tools:ignore="PrivateResource">
 
-        <ImageView
+            <ImageView
             android:id="@+id/ivImage"
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_flipkart"
+                android:src="@drawable/ic_profile"
             android:contentDescription="@string/todo"
             tools:ignore="VectorDrawableCompat" />
 
-    </com.google.android.material.card.MaterialCardView>
+            <TextView
+                android:id="@+id/invisibleEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/email"
+                android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/tvCompany"
+
+            <TextView
+                android:id="@+id/tvUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/view2"
+                android:layout_alignTop="@+id/ivImage"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="4dp"
         android:layout_marginRight="10dp"
-        android:layout_toEndOf="@+id/view2"
-        android:layout_toRightOf="@+id/view2"
+                android:layout_toEndOf="@+id/ivImage"
+                android:layout_toRightOf="@+id/ivImage"
         android:textStyle="bold"
-        android:text="@string/ekart_logistics"
+                android:text="Suraj Kumar Sahoo"
+        android:textColor="#000" />
+
+    <TextView
+        android:id="@+id/tvUserPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ivImage"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="10dp"
+        android:layout_toEndOf="@+id/ivImage"
+        android:layout_toRightOf="@+id/ivImage"
+        android:text="+91-7978756312"
+        android:textSize="12sp"
         android:textColor="#000" />
 
     <TextView
         android:id="@+id/tvTimings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/view2"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="10dp"
-        android:layout_toEndOf="@+id/view2"
-        android:layout_toRightOf="@+id/view2"
-        android:text="@string/_11_aug_9_am_4_hours"
-        android:textSize="12sp"
-        android:textColor="#000" />
-
-    <TextView
-        android:id="@+id/tvAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/view2"
+        android:layout_alignTop="@+id/ivImage"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="50dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="-30dp"
-        android:layout_toEndOf="@+id/view2"
-        android:layout_toRightOf="@+id/view2"
+        android:layout_toEndOf="@+id/ivImage"
+        android:layout_toRightOf="@+id/ivImage"
         android:textSize="12sp"
-        android:text="@string/baramunda_bhubaneswar"
+        android:text="@string/_11_aug_9_am_4_hours"
         android:textColor="#000" />
 
 

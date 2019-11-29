@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawer;
     ActionBarDrawerToggle toggle;
     FirebaseAuth auth;
-    TextView tvWelcome, tvEmail, tvSlotTabTitle;
+    TextView tvWelcome, tvEmail, tvTabTitle;
     DatabaseReference dbRef,usrRef;
     String uEmail,checkEmail;
     String id, name, getImageUrl;
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setItemIconTintList(null);
 
         frameLayout=findViewById(R.id.fragment_container);
-        tvSlotTabTitle=findViewById(R.id.tvSlotTabTitle);
+        tvTabTitle=findViewById(R.id.tvTabTitle);
         viewPager=findViewById(R.id.viewPager);
         tabLayout=findViewById(R.id.tabLayout);
 
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             openProfile=extras.getBoolean("openProfile");
         if (openProfile) {
 
-            tvSlotTabTitle.setVisibility(View.GONE);
+            tvTabTitle.setVisibility(View.GONE);
             ft.replace(R.id.fragment_container, new ProfileFragment());
             ft.addToBackStack(null);
             ft.commit();
@@ -197,12 +197,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             tabLayout.setVisibility(View.VISIBLE);
             TabAdapter adapter=new TabAdapter(getSupportFragmentManager());
             adapter.addFragment(new ActiveSlotFragment(), "Active Slots");
-            //adapter.addFragment(new LicenseDetailsFragment(), "View Details");
+            adapter.addFragment(new HistorySlotFragment(), "History Slots");
             viewPager.setAdapter(adapter);
             tabLayout.setupWithViewPager(viewPager);
-            drawer.closeDrawer(GravityCompat.START);
         }
-
 
     }
 
@@ -265,7 +263,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(it);
 
-
                         }
                     })
                     .setNegativeButton("No",null).show();
@@ -292,26 +289,107 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 tabLayout.setVisibility(View.VISIBLE);
                 TabAdapter adapter=new TabAdapter(getSupportFragmentManager());
                 adapter.addFragment(new ActiveSlotFragment(), "Active Slots");
-                //adapter.addFragment(new LicenseDetailsFragment(), "View Details");
+                adapter.addFragment(new HistorySlotFragment(), "History Slots");
                 viewPager.setAdapter(adapter);
                 tabLayout.setupWithViewPager(viewPager);
                 drawer.closeDrawer(GravityCompat.START);
                 break;
 
             case R.id.nav_company:
-                tvSlotTabTitle.setVisibility(View.GONE);
-                viewPager.setVisibility(View.GONE);
-                tabLayout.setVisibility(View.GONE);
-                frameLayout.setVisibility(View.VISIBLE);
-                ob=new ActiveSlotFragment();
-                ft.replace(R.id.fragment_container,ob);
-                ft.addToBackStack(null);
-                ft.commit();
+                Intent it=new Intent(MainActivity.this, InformationActivity.class);
+
+                it.putExtra("flipkart", "0");
+                it.putExtra("fedex", "0");
+                it.putExtra("aramex", "0");
+                it.putExtra("delhivery", "0");
+                it.putExtra("bluedart", "0");
+                it.putExtra("dtdc", "0");
+                it.putExtra("ipost", "0");
+
+                final FirebaseDatabase database=FirebaseDatabase.getInstance();
+                final DatabaseReference vendRef=database.getReference("Vendor");
+
+                vendRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            String vEmail=ds.child("vendorMail").getValue(String.class);
+                            assert vEmail != null;
+                            if (vEmail.equals(checkEmail)) {
+                                int position=ds.child("companyID").getValue(Integer.class);
+                                Intent it=new Intent(MainActivity.this, InformationActivity.class);
+
+                                it.putExtra("flipkart", "0");
+                                it.putExtra("fedex", "0");
+                                it.putExtra("aramex", "0");
+                                it.putExtra("delhivery", "0");
+                                it.putExtra("bluedart", "0");
+                                it.putExtra("dtdc", "0");
+                                it.putExtra("ipost", "0");
+
+
+                                switch (position) {
+
+                                    case 1:
+                                        it.putExtra("flipkart", "1");
+                                        finish();
+                                        startActivity(it);
+                                        break;
+
+                                    case 2:
+                                        it.putExtra("fedex", "2");
+                                        finish();
+                                        startActivity(it);
+                                        break;
+
+                                    case 3:
+                                        it.putExtra("aramex", "3");
+                                        finish();
+                                        startActivity(it);
+                                        break;
+
+                                    case 4:
+                                        it.putExtra("delhivery", "4");
+                                        finish();
+                                        startActivity(it);
+                                        break;
+
+                                    case 5:
+                                        it.putExtra("bluedart", "5");
+                                        finish();
+                                        startActivity(it);
+                                        break;
+
+                                    case 6:
+                                        it.putExtra("dtdc", "6");
+                                        finish();
+                                        startActivity(it);
+                                        break;
+
+                                    case 7:
+                                        it.putExtra("ipost", "7");
+                                        finish();
+                                        startActivity(it);
+                                        break;
+
+                                }
+
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
                 drawer.closeDrawer(GravityCompat.START);
                 break;
 
             case R.id.nav_profile:
-                tvSlotTabTitle.setVisibility(View.GONE);
+                tvTabTitle.setVisibility(View.GONE);
                 viewPager.setVisibility(View.GONE);
                 tabLayout.setVisibility(View.GONE);
                 frameLayout.setVisibility(View.VISIBLE);
@@ -323,7 +401,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_contacts:
-                tvSlotTabTitle.setVisibility(View.GONE);
+                tvTabTitle.setVisibility(View.GONE);
                 viewPager.setVisibility(View.GONE);
                 tabLayout.setVisibility(View.GONE);
                 frameLayout.setVisibility(View.VISIBLE);
@@ -335,7 +413,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_feedback:
-                tvSlotTabTitle.setVisibility(View.GONE);
+                tvTabTitle.setVisibility(View.GONE);
                 viewPager.setVisibility(View.GONE);
                 tabLayout.setVisibility(View.GONE);
                 frameLayout.setVisibility(View.VISIBLE);
@@ -347,7 +425,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_about:
-                tvSlotTabTitle.setVisibility(View.GONE);
+                tvTabTitle.setVisibility(View.GONE);
                 viewPager.setVisibility(View.GONE);
                 tabLayout.setVisibility(View.GONE);
                 frameLayout.setVisibility(View.VISIBLE);

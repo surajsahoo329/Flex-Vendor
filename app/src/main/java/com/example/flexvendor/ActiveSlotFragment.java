@@ -37,8 +37,9 @@ import java.util.List;
 
 public class ActiveSlotFragment extends Fragment {
 
-    private String checkMail, vEmail, name, phone;
+    private String checkMail, vEmail, name, phone, email, date, stTime, hours;
     private ListView activeListViewSlot;
+    private CustomListViewAdapter adapter;
     private int companyID;
 
     private List<Users> users;
@@ -98,14 +99,15 @@ public class ActiveSlotFragment extends Fragment {
                                     if(slotFlag == companyID) {
 
                                         String id = ds.child("userId").getValue(String.class);
-                                        final String email = ds.child("userMail").getValue(String.class);
-                                        final String date = ds.child("showDate").getValue(String.class);
-                                        final String stTime = ds.child("showStartTime").getValue(String.class);
-                                        final String hours = ds.child("showWorkHours").getValue(String.class);
+                                        email=ds.child("userMail").getValue(String.class);
+                                        date=ds.child("showDate").getValue(String.class);
+                                        stTime=ds.child("showStartTime").getValue(String.class);
+                                        hours=ds.child("showWorkHours").getValue(String.class);
 
                                         @SuppressLint("SimpleDateFormat") SimpleDateFormat df=new SimpleDateFormat("dd-MMM-yyyy");
                                         Date strDate = null;
                                         try {
+                                            assert date != null;
                                             strDate = df.parse(date);
                                         } catch (ParseException e) {
                                             e.printStackTrace();
@@ -195,6 +197,7 @@ public class ActiveSlotFragment extends Fragment {
 
                                             if (currentDate.equals(date)) {
 
+                                                // current hour passed
                                                 if (currentHour >= (timeCount + hourCount)) {
 
 
@@ -217,6 +220,7 @@ public class ActiveSlotFragment extends Fragment {
                                                             {
                                                                 String inLoopEmail = ds.child("userMail").getValue(String.class);
 
+                                                                assert email != null;
                                                                 if(email.equals(inLoopEmail))
                                                                 {
 
@@ -237,6 +241,9 @@ public class ActiveSlotFragment extends Fragment {
                                                                     String modTime=String.valueOf(modDateArr) + ", " + stTime + " | " + hours;
                                                                     Users item = new Users(email,name,phone,modTime);
                                                                     users.add(item);
+                                                                    adapter=new CustomListViewAdapter(refActivity, R.layout.list_slot, users);
+                                                                    activeListViewSlot.setAdapter(adapter);
+                                                                    adapter.notifyDataSetChanged();
                                                                 }
 
                                                             }
@@ -252,6 +259,15 @@ public class ActiveSlotFragment extends Fragment {
                                                 }
                                             } else {
                                                 //Date passed code
+                                                DatabaseReference dbSlot=FirebaseDatabase.getInstance().getReference("Slot");
+                                                assert id != null;
+                                                dbSlot.child(id).child("slotFlag").setValue(8);
+                                                DatabaseReference databaseHistory=database.getReference("History");
+                                                String idHistory=databaseHistory.push().getKey();
+                                                Slot slot=new Slot(email, idHistory, slotFlag, date, stTime, hours);
+                                                assert idHistory != null;
+                                                databaseHistory.child(idHistory).setValue(slot);
+
                                             }
 
                                         }
@@ -284,6 +300,9 @@ public class ActiveSlotFragment extends Fragment {
                                                             String modTime=String.valueOf(modDateArr) + ", " + stTime + " | " + hours;
                                                             Users item=new Users(email, name, phone, modTime);
                                                             users.add(item);
+                                                            adapter=new CustomListViewAdapter(refActivity, R.layout.list_slot, users);
+                                                            activeListViewSlot.setAdapter(adapter);
+                                                            adapter.notifyDataSetChanged();
                                                         }
 
                                                     }
@@ -314,10 +333,6 @@ public class ActiveSlotFragment extends Fragment {
                     }
                 }
 
-                CustomListViewAdapter adapter=new CustomListViewAdapter(refActivity,
-                        R.layout.list_slot, users);
-                activeListViewSlot.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
                 pd.dismiss();
 
             }

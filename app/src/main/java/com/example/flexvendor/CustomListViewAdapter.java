@@ -3,6 +3,7 @@ package com.example.flexvendor;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +13,20 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.List;
 
 public class CustomListViewAdapter extends ArrayAdapter<Users> {
 
     private Context context;
+    private String getImageUrl;
+    private ViewHolder holder;
 
     CustomListViewAdapter(Context context, int resourceId,
                           List<Users> items) {
@@ -27,7 +37,6 @@ public class CustomListViewAdapter extends ArrayAdapter<Users> {
     /*private view holder class*/
     private class ViewHolder {
         ImageView imageView;
-        TextView txtEmail;
         TextView txtName;
         TextView txtPhone;
         TextView txtTimings;
@@ -36,7 +45,7 @@ public class CustomListViewAdapter extends ArrayAdapter<Users> {
     @SuppressLint("InflateParams")
     @NonNull
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        ViewHolder holder;
+
         Users users=getItem(position);
 
         LayoutInflater mInflater = (LayoutInflater) context
@@ -45,9 +54,9 @@ public class CustomListViewAdapter extends ArrayAdapter<Users> {
             assert mInflater != null;
             convertView = mInflater.inflate(R.layout.list_slot, null);
             holder = new ViewHolder();
-            holder.txtName=convertView.findViewById(R.id.tvCompany);
+            holder.txtName=convertView.findViewById(R.id.tvUserName);
+            holder.txtPhone=convertView.findViewById(R.id.tvUserPhone);
             holder.txtTimings=convertView.findViewById(R.id.tvTimings);
-            holder.txtPhone=convertView.findViewById(R.id.tvAddress);
             holder.imageView=convertView.findViewById(R.id.ivImage);
             convertView.setTag(holder);
         } else
@@ -55,10 +64,50 @@ public class CustomListViewAdapter extends ArrayAdapter<Users> {
 
         assert users != null;
         holder.txtName.setText(users.getName());
-        holder.txtTimings.setText(users.getTimings());
         holder.txtPhone.setText(users.getPhone());
-        //holder.imageView.setImageResource(users.getImageId());
+        holder.txtTimings.setText(users.getTimings());
+        String sendEmail=users.getEmail();
+        final StorageReference mStorageRef=FirebaseStorage.getInstance().getReference();
+        final StorageReference imgRef=mStorageRef.child(sendEmail + "/photo.jpg");
+        final long TEN_MEGABYTES=10024 * 10024;
+
+        imgRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+
+                getImageUrl=uri.toString();
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+
+            }
+        });
+
+        imgRef.getBytes(TEN_MEGABYTES).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+
+                Glide.with(context)
+                        .load(getImageUrl)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(holder.imageView);
+
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+
+            }
+        });
+
 
         return convertView;
     }
+
+
 }
