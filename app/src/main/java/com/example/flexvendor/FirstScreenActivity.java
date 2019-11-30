@@ -24,17 +24,6 @@ public class FirstScreenActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         ); // sets status bar transparent
 
-        /*imageView = (ImageView)findViewById(R.id.logo_id);
-
-        Bitmap bm = ((BitmapDrawable)getResources().getDrawable(R.drawable.delivery)).getBitmap();
-        Bitmap ir = Bitmap.createBitmap(bm.getWidth(),bm.getHeight(),bm.getConfig());
-        Canvas canvas = new Canvas(ir);
-        Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setShader(new BitmapShader(bm, Shader.TileMode.CLAMP,Shader.TileMode.CLAMP));
-        canvas.drawRoundRect((new RectF(0,0,bm.getWidth(),bm.getHeight())),100,100,paint);
-        imageView.setImageBitmap(ir);*/ //set circular image
-
         Handler handler=new Handler();
         handler.postDelayed(new Runnable() {
             @Override
