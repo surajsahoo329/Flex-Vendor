@@ -123,5 +123,6 @@
     <string name="slots">Slots</string>
     <string name="users">Company</string>
     <string name="courier">Courier</string>
+    <string name="your_company">Your Company</string>
 </resources>
 

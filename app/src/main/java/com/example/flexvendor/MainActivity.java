@@ -286,6 +286,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.nav_slots:
 
+                frameLayout.setVisibility(View.GONE);
+                tvTabTitle.setVisibility(View.VISIBLE);
                 viewPager.setVisibility(View.VISIBLE);
                 tabLayout.setVisibility(View.VISIBLE);
                 TabAdapter adapter=new TabAdapter(getSupportFragmentManager());

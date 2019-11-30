@@ -253,7 +253,9 @@ public class RegisterActivity extends AppCompatActivity implements ValueEventLis
         final String mail=etEmail.getText().toString().trim();
         final String phone=etPhone.getText().toString().trim();
         final String password=etPassword.getText().toString().trim();
-        final int companyId=0, PhotoFlag=0;
+        final String strCompanyId=etCompanyId.getText().toString().trim();
+        final int companyId=Integer.parseInt(strCompanyId);
+        final int PhotoFlag=0;
 
 
         final ProgressDialog pd=ProgressDialog.show(RegisterActivity.this, "Creating account", "Please wait", true);

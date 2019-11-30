@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -124,5 +125,28 @@ public class LicenseDetailsActivity extends AppCompatActivity {
 
         dlRef.addListenerForSingleValueEvent(dlListener);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        Intent intent=new Intent(LicenseDetailsActivity.this, MainActivity.class);
+        intent.putExtra("openSlots", true);
+        overridePendingTransition(0, 0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+        startActivity(intent);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent intent=new Intent(LicenseDetailsActivity.this, MainActivity.class);
+        intent.putExtra("openSlots", true);
+        overridePendingTransition(0, 0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+        startActivity(intent);
     }
 }

@@ -36,7 +36,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
-        android:text="Slots"
+        android:text="@string/slots"
         android:textColor="#000"
         android:textSize="30sp"
         android:textStyle="bold" />
@@ -47,6 +47,7 @@
         android:layout_height="?android:actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:tabGravity="fill"
+        android:layout_marginTop="10dp"
         app:tabIndicatorColor="@color/colorPrimary"
         app:tabMode="fixed"
         app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
