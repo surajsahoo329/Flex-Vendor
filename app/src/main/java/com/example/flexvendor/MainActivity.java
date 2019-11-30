@@ -285,6 +285,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId()) {
 
             case R.id.nav_slots:
+
                 viewPager.setVisibility(View.VISIBLE);
                 tabLayout.setVisibility(View.VISIBLE);
                 TabAdapter adapter=new TabAdapter(getSupportFragmentManager());
@@ -296,8 +297,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_company:
-                Intent it=new Intent(MainActivity.this, InformationActivity.class);
 
+                Intent it=new Intent(MainActivity.this, InformationActivity.class);
                 it.putExtra("flipkart", "0");
                 it.putExtra("fedex", "0");
                 it.putExtra("aramex", "0");
@@ -389,6 +390,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_profile:
+
                 tvTabTitle.setVisibility(View.GONE);
                 viewPager.setVisibility(View.GONE);
                 tabLayout.setVisibility(View.GONE);
@@ -401,6 +403,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_contacts:
+
                 tvTabTitle.setVisibility(View.GONE);
                 viewPager.setVisibility(View.GONE);
                 tabLayout.setVisibility(View.GONE);
@@ -413,6 +416,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_feedback:
+
                 tvTabTitle.setVisibility(View.GONE);
                 viewPager.setVisibility(View.GONE);
                 tabLayout.setVisibility(View.GONE);
@@ -425,6 +429,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_about:
+
                 tvTabTitle.setVisibility(View.GONE);
                 viewPager.setVisibility(View.GONE);
                 tabLayout.setVisibility(View.GONE);
@@ -437,6 +442,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_share:
+
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("text/plain");
                 i.putExtra(Intent.EXTRA_SUBJECT, "Flex - Delivering Jobs");
@@ -447,6 +453,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_logout:
+
                 new AlertDialog.Builder(this)
                         .setIcon(R.drawable.ic_launcher_round)
                         .setTitle("Logging out")

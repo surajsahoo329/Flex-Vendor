@@ -3,6 +3,7 @@ package com.example.flexvendor;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -34,6 +35,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -68,7 +70,7 @@ public class ActiveSlotFragment extends Fragment {
         final Activity refActivity=getActivity();
         final View parentHolder=inflater.inflate(R.layout.fragment_active_slot, container, false);
 
-        //final ProgressDialog pd  = ProgressDialog.show(refActivity,"Loading slots","Please wait...",true);
+        final ProgressDialog pd=ProgressDialog.show(refActivity, "Loading slots", "Please wait...", true);
 
         FirebaseUser vendUser=FirebaseAuth.getInstance().getCurrentUser();
         assert vendUser != null;
@@ -225,14 +227,14 @@ public class ActiveSlotFragment extends Fragment {
                                                         @Override
                                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                                                String inLoopEmail=ds.child("userMail").getValue(String.class);
+                                                            for (final DataSnapshot ds : dataSnapshot.getChildren()) {
+                                                                final String inLoopEmail=ds.child("userMail").getValue(String.class);
 
                                                                 assert email != null;
                                                                 if (email.equals(inLoopEmail)) {
 
                                                                     char[] dateArr=date.toCharArray();
-                                                                    char[] modDateArr=new char[date.length()];
+                                                                    final char[] modDateArr=new char[date.length()];
                                                                     int count=0;
 
                                                                     for (int i=0; i < dateArr.length; i++) {
@@ -244,20 +246,23 @@ public class ActiveSlotFragment extends Fragment {
                                                                         modDateArr[i]=dateArr[i];
                                                                     }
 
-                                                                    name=ds.child("userName").getValue(String.class);
-                                                                    phone=ds.child("userPhone").getValue(String.class);
-                                                                    String modTime=String.valueOf(modDateArr) + ", " + stTime + " | " + hours;
-
                                                                     final StorageReference mStorageRef=FirebaseStorage.getInstance().getReference();
                                                                     final StorageReference imgRef=mStorageRef.child(inLoopEmail + "/photo.jpg");
-
-                                                                    /*Toast.makeText(context, getEmailFromSlot, Toast.LENGTH_LONG).show();
 
                                                                     imgRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                                         @Override
                                                                         public void onSuccess(Uri uri) {
 
-                                                                            getImageUrl=uri.toString();
+                                                                            getImageUrl.add(uri.toString());
+                                                                            name=ds.child("userName").getValue(String.class);
+                                                                            phone=ds.child("userPhone").getValue(String.class);
+                                                                            String modTime=String.valueOf(modDateArr) + ", " + stTime + " | " + hours;
+                                                                            Users item=new Users(inLoopEmail, name, phone, modTime);
+                                                                            users.add(item);
+                                                                            adapter=new CustomListViewAdapter(refActivity, R.layout.list_slot, users, getImageUrl);
+                                                                            activeListViewSlot.setAdapter(adapter);
+                                                                            Collections.sort(getImageUrl);
+
 
                                                                         }
                                                                     }).addOnFailureListener(new OnFailureListener() {
@@ -268,12 +273,6 @@ public class ActiveSlotFragment extends Fragment {
                                                                         }
                                                                     });
 
-                                                                    Toast.makeText(getActivity(),"first"+getImageUrl,Toast.LENGTH_LONG).show();
-                                                                    Users item=new Users(inLoopEmail, name, phone, modTime);
-                                                                    users.add(item);
-                                                                    adapter=new CustomListViewAdapter(refActivity, R.layout.list_slot, users, getImageUrl);
-                                                                    activeListViewSlot.setAdapter(adapter);
-                                                                    position ++;*/
                                                                 }
 
                                                             }
@@ -314,31 +313,16 @@ public class ActiveSlotFragment extends Fragment {
                                                         assert email != null;
                                                         if (email.equals(inLoopEmail)) {
 
-                                                            char[] dateArr=date.toCharArray();
-                                                            final char[] modDateArr=new char[date.length()];
-                                                            int count=0;
-
-                                                            for (int i=0; i < dateArr.length; i++) {
-                                                                if (dateArr[i] == '-')
-                                                                    count++;
-                                                                if (count == 2)
-                                                                    break;
-
-                                                                modDateArr[i]=dateArr[i];
-                                                            }
+                                                            final char[] modDateArr=date.toCharArray();
 
                                                             final StorageReference mStorageRef=FirebaseStorage.getInstance().getReference();
                                                             final StorageReference imgRef=mStorageRef.child(inLoopEmail + "/photo.jpg");
-
-
-                                                            //Toast.makeText(context, getEmailFromSlot, Toast.LENGTH_LONG).show();
 
                                                             imgRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                                 @Override
                                                                 public void onSuccess(Uri uri) {
 
                                                                     getImageUrl.add(uri.toString());
-                                                                    //Toast.makeText(getActivity(),"second "+getImageUrl,Toast.LENGTH_LONG).show();
                                                                     name=ds.child("userName").getValue(String.class);
                                                                     phone=ds.child("userPhone").getValue(String.class);
                                                                     String modTime=String.valueOf(modDateArr) + ", " + stTime + " | " + hours;
@@ -346,7 +330,6 @@ public class ActiveSlotFragment extends Fragment {
                                                                     users.add(item);
                                                                     adapter=new CustomListViewAdapter(refActivity, R.layout.list_slot, users, getImageUrl);
                                                                     activeListViewSlot.setAdapter(adapter);
-
 
                                                                 }
                                                             }).addOnFailureListener(new OnFailureListener() {
@@ -370,7 +353,7 @@ public class ActiveSlotFragment extends Fragment {
                                                 }
                                             });
 
-                                            //pd.dismiss();
+                                            pd.dismiss();
                                         }
 
 
@@ -388,7 +371,7 @@ public class ActiveSlotFragment extends Fragment {
 
                         });
 
-                        //pd.dismiss();
+                        pd.dismiss();
                         break;
 
                     }
@@ -396,6 +379,7 @@ public class ActiveSlotFragment extends Fragment {
 
 
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -414,6 +398,7 @@ public class ActiveSlotFragment extends Fragment {
                 startActivity(it);
             }
         });
+
 
         return parentHolder;
     }

@@ -57,8 +57,6 @@ public class CustomListViewAdapter extends ArrayAdapter<Users> {
         holder.txtTimings.setText(users.getTimings());
         holder.txtEmail.setText(users.getEmail());
 
-        //Toast.makeText(context,getImageUrl.get(position),Toast.LENGTH_LONG).show();
-
         Glide.with(context)
                 .load(getImageUrl.get(position))
                 .apply(RequestOptions.circleCropTransform())

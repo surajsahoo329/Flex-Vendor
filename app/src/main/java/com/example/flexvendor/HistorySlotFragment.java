@@ -3,6 +3,8 @@ package com.example.flexvendor;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,8 +16,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +38,9 @@ import java.util.List;
 
 public class HistorySlotFragment extends Fragment {
 
-    private String checkMail, vEmail, name, phone, email, date, stTime, hours;
+    private String checkMail, vEmail, name, phone;
     private ListView historyListViewSlot;
+    private List<String> getImageUrl;
     private CustomListViewAdapter adapter;
     private int companyId;
 
@@ -49,7 +61,7 @@ public class HistorySlotFragment extends Fragment {
         final Activity refActivity=getActivity();
         final View parentHolder=inflater.inflate(R.layout.fragment_history_slot, container, false);
 
-        //final ProgressDialog pd=ProgressDialog.show(refActivity, "Loading slots", "Please wait...", true);
+        final ProgressDialog pd=ProgressDialog.show(refActivity, "Loading slots", "Please wait...", true);
 
         FirebaseUser vendUser=FirebaseAuth.getInstance().getCurrentUser();
         assert vendUser != null;
@@ -58,9 +70,10 @@ public class HistorySlotFragment extends Fragment {
 
         historyListViewSlot=parentHolder.findViewById(R.id.historyListViewSlot);
         users=new ArrayList<>();
+        getImageUrl=new ArrayList<>();
 
 
-        /*final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final FirebaseDatabase database=FirebaseDatabase.getInstance();
         final DatabaseReference ref=database.getReference("History");
         final DatabaseReference vendRef=database.getReference("Vendor");
         final DatabaseReference userRef=database.getReference("User");
@@ -97,32 +110,39 @@ public class HistorySlotFragment extends Fragment {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                                for (final DataSnapshot ds : dataSnapshot.getChildren()) {
 
-                                                    String inLoopEmail=ds.child("userMail").getValue(String.class);
+                                                    final String inLoopEmail=ds.child("userMail").getValue(String.class);
 
                                                     assert inLoopEmail != null;
                                                     if (inLoopEmail.equals(email)) {
-                                                        char[] dateArr=date.toCharArray();
-                                                        char[] modDateArr=new char[date.length()];
-                                                        int count=0;
 
-                                                        for (int i=0; i < dateArr.length; i++) {
-                                                            if (dateArr[i] == '-')
-                                                                count++;
-                                                            if (count == 2)
-                                                                break;
+                                                        assert date != null;
+                                                        final char[] modDateArr=date.toCharArray();
+                                                        final StorageReference mStorageRef=FirebaseStorage.getInstance().getReference();
+                                                        final StorageReference imgRef=mStorageRef.child(inLoopEmail + "/photo.jpg");
 
-                                                            modDateArr[i]=dateArr[i];
-                                                        }
-                                                        name=ds.child("userName").getValue(String.class);
-                                                        phone=ds.child("userPhone").getValue(String.class);
-                                                        String modTime=String.valueOf(modDateArr) + ", " + stTime + " | " + hours;
-                                                        Users item=new Users(email, name, phone, modTime);
-                                                        users.add(item);
-                                                        adapter=new CustomListViewAdapter(refActivity, R.layout.list_slot, users);
-                                                        historyListViewSlot.setAdapter(adapter);
-                                                        adapter.notifyDataSetChanged();
+                                                        imgRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                            @Override
+                                                            public void onSuccess(Uri uri) {
+
+                                                                getImageUrl.add(uri.toString());
+                                                                name=ds.child("userName").getValue(String.class);
+                                                                phone=ds.child("userPhone").getValue(String.class);
+                                                                String modTime=String.valueOf(modDateArr) + ", " + stTime + " | " + hours;
+                                                                Users item=new Users(inLoopEmail, name, phone, modTime);
+                                                                users.add(item);
+                                                                adapter=new CustomListViewAdapter(refActivity, R.layout.list_slot, users, getImageUrl);
+                                                                historyListViewSlot.setAdapter(adapter);
+
+                                                            }
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+
+
+                                                            }
+                                                        });
                                                     }
 
 
@@ -160,7 +180,7 @@ public class HistorySlotFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });*/
+        });
 
 
         return parentHolder;
