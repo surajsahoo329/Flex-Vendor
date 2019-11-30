@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -25,8 +26,7 @@ import java.util.List;
 public class CustomListViewAdapter extends ArrayAdapter<Users> {
 
     private Context context;
-    private String getImageUrl;
-    private ViewHolder holder;
+    String getImageUrl, getEmail;
 
     CustomListViewAdapter(Context context, int resourceId,
                           List<Users> items) {
@@ -42,10 +42,11 @@ public class CustomListViewAdapter extends ArrayAdapter<Users> {
 
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        final ViewHolder holder;
         if (convertView == null) {
             assert mInflater != null;
             convertView = mInflater.inflate(R.layout.list_slot, null);
-            holder = new ViewHolder();
+            holder=new ViewHolder();
             holder.txtName=convertView.findViewById(R.id.tvUserName);
             holder.txtPhone=convertView.findViewById(R.id.tvUserPhone);
             holder.txtTimings=convertView.findViewById(R.id.tvTimings);
@@ -53,17 +54,20 @@ public class CustomListViewAdapter extends ArrayAdapter<Users> {
             holder.imageView=convertView.findViewById(R.id.ivImage);
             convertView.setTag(holder);
         } else
-            holder = (ViewHolder) convertView.getTag();
+            holder=(ViewHolder) convertView.getTag();
 
         assert users != null;
         holder.txtName.setText(users.getName());
         holder.txtPhone.setText("+91-" + users.getPhone());
         holder.txtTimings.setText(users.getTimings());
         holder.txtEmail.setText(users.getEmail());
-        String sendEmail=users.getEmail();
+        getEmail=holder.txtEmail.getText().toString().trim();
+
         final StorageReference mStorageRef=FirebaseStorage.getInstance().getReference();
-        final StorageReference imgRef=mStorageRef.child(sendEmail + "/photo.jpg");
+        final StorageReference imgRef=mStorageRef.child(getEmail + "/photo.jpg");
         final long TEN_MEGABYTES=10024 * 10024;
+
+        Toast.makeText(context, getEmail, Toast.LENGTH_LONG).show();
 
         imgRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -89,7 +93,6 @@ public class CustomListViewAdapter extends ArrayAdapter<Users> {
                         .apply(RequestOptions.circleCropTransform())
                         .into(holder.imageView);
 
-
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -99,12 +102,11 @@ public class CustomListViewAdapter extends ArrayAdapter<Users> {
             }
         });
 
-
         return convertView;
     }
 
     /*private view holder class*/
-    private class ViewHolder {
+    static class ViewHolder {
         ImageView imageView;
         TextView txtEmail;
         TextView txtName;

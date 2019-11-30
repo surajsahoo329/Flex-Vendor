@@ -94,10 +94,10 @@ public class HistorySlotFragment extends Fragment {
 
                                     if (slotFlag == companyID) {
 
-                                        email=ds.child("userMail").getValue(String.class);
-                                        date=ds.child("showDate").getValue(String.class);
-                                        stTime=ds.child("showStartTime").getValue(String.class);
-                                        hours=ds.child("showWorkHours").getValue(String.class);
+                                        final String email=ds.child("userMail").getValue(String.class);
+                                        final String date=ds.child("showDate").getValue(String.class);
+                                        final String stTime=ds.child("showStartTime").getValue(String.class);
+                                        final String hours=ds.child("showWorkHours").getValue(String.class);
 
                                         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override

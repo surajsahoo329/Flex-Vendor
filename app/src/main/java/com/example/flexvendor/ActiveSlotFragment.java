@@ -40,10 +40,11 @@ import java.util.List;
 
 public class ActiveSlotFragment extends Fragment {
 
-    private String checkMail, vEmail, name, phone, email, date, stTime, hours;
+    private String checkMail, vEmail, name, phone, sendEmail;
     private ListView activeListViewSlot;
     private CustomListViewAdapter adapter;
     private int companyID;
+    private String getImageUrl;
 
     private List<Users> users;
 
@@ -102,10 +103,10 @@ public class ActiveSlotFragment extends Fragment {
                                     if(slotFlag == companyID) {
 
                                         String id = ds.child("userId").getValue(String.class);
-                                        email=ds.child("userMail").getValue(String.class);
-                                        date=ds.child("showDate").getValue(String.class);
-                                        stTime=ds.child("showStartTime").getValue(String.class);
-                                        hours=ds.child("showWorkHours").getValue(String.class);
+                                        final String email=ds.child("userMail").getValue(String.class);
+                                        final String date=ds.child("showDate").getValue(String.class);
+                                        final String stTime=ds.child("showStartTime").getValue(String.class);
+                                        final String hours=ds.child("showWorkHours").getValue(String.class);
 
                                         @SuppressLint("SimpleDateFormat") SimpleDateFormat df=new SimpleDateFormat("dd-MMM-yyyy");
                                         Date strDate = null;
@@ -219,13 +220,11 @@ public class ActiveSlotFragment extends Fragment {
                                                         @Override
                                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                            for (DataSnapshot ds: dataSnapshot.getChildren())
-                                                            {
-                                                                String inLoopEmail = ds.child("userMail").getValue(String.class);
+                                                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                                                String inLoopEmail=ds.child("userMail").getValue(String.class);
 
                                                                 assert email != null;
-                                                                if(email.equals(inLoopEmail))
-                                                                {
+                                                                if (email.equals(inLoopEmail)) {
 
                                                                     char[] dateArr=date.toCharArray();
                                                                     char[] modDateArr=new char[date.length()];
@@ -239,14 +238,15 @@ public class ActiveSlotFragment extends Fragment {
 
                                                                         modDateArr[i]=dateArr[i];
                                                                     }
-                                                                    name = ds.child("userName").getValue(String.class);
-                                                                    phone = ds.child("userPhone").getValue(String.class);
+                                                                    name=ds.child("userName").getValue(String.class);
+                                                                    phone=ds.child("userPhone").getValue(String.class);
+                                                                    sendEmail=ds.child("userMail").getValue(String.class);
                                                                     String modTime=String.valueOf(modDateArr) + ", " + stTime + " | " + hours;
-                                                                    Users item = new Users(email,name,phone,modTime);
+                                                                    Users item=new Users(sendEmail, name, phone, modTime);
                                                                     users.add(item);
                                                                     adapter=new CustomListViewAdapter(refActivity, R.layout.list_slot, users);
-                                                                    adapter.notifyDataSetChanged();
                                                                     activeListViewSlot.setAdapter(adapter);
+
                                                                 }
 
                                                             }
@@ -258,6 +258,7 @@ public class ActiveSlotFragment extends Fragment {
 
                                                         }
                                                     });
+
 
                                                 }
                                             } else {
@@ -300,12 +301,13 @@ public class ActiveSlotFragment extends Fragment {
                                                             }
                                                             name=ds.child("userName").getValue(String.class);
                                                             phone=ds.child("userPhone").getValue(String.class);
+                                                            sendEmail=ds.child("userMail").getValue(String.class);
                                                             String modTime=String.valueOf(modDateArr) + ", " + stTime + " | " + hours;
-                                                            Users item=new Users(email, name, phone, modTime);
+                                                            Users item=new Users(sendEmail, name, phone, modTime);
                                                             users.add(item);
                                                             adapter=new CustomListViewAdapter(refActivity, R.layout.list_slot, users);
-                                                            adapter.notifyDataSetChanged();
                                                             activeListViewSlot.setAdapter(adapter);
+
                                                         }
 
                                                     }
@@ -334,9 +336,10 @@ public class ActiveSlotFragment extends Fragment {
 
                         });
 
+                        break;
+
                     }
                 }
-
 
                 pd.dismiss();
 
@@ -357,7 +360,6 @@ public class ActiveSlotFragment extends Fragment {
                 Intent it=new Intent(getActivity(), LicenseDetailsActivity.class);
                 it.putExtra("email", getMailFromList);
                 startActivity(it);
-
             }
         });
 
