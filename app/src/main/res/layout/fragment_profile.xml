@@ -33,8 +33,7 @@
             android:layout_gravity="center"
             android:clickable="true"
             android:contentDescription="@string/todo"
-            android:focusable="true"
-            android:src="@drawable/ic_profile" />
+            android:focusable="true" />
 
 
         <Space

@@ -3,8 +3,8 @@ package com.example.flexvendor;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -40,11 +44,12 @@ import java.util.List;
 
 public class ActiveSlotFragment extends Fragment {
 
-    private String checkMail, vEmail, name, phone, sendEmail;
+    private String checkMail, vEmail, name, phone;
+    private List<String> getImageUrl;
+    private int position=0;
     private ListView activeListViewSlot;
     private CustomListViewAdapter adapter;
-    private int companyID;
-    private String getImageUrl;
+    private int companyId;
 
     private List<Users> users;
 
@@ -57,13 +62,13 @@ public class ActiveSlotFragment extends Fragment {
     @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(api=Build.VERSION_CODES.KITKAT)
     @Override
-    public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final Activity refActivity=getActivity();
         final View parentHolder=inflater.inflate(R.layout.fragment_active_slot, container, false);
 
-        final ProgressDialog pd  = ProgressDialog.show(refActivity,"Loading slots","Please wait...",true);
+        //final ProgressDialog pd  = ProgressDialog.show(refActivity,"Loading slots","Please wait...",true);
 
         FirebaseUser vendUser=FirebaseAuth.getInstance().getCurrentUser();
         assert vendUser != null;
@@ -72,7 +77,7 @@ public class ActiveSlotFragment extends Fragment {
 
         activeListViewSlot=parentHolder.findViewById(R.id.activeListViewSlot);
         users=new ArrayList<>();
-
+        getImageUrl=new ArrayList<>();
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference vendRef = database.getReference("Vendor");
@@ -89,7 +94,7 @@ public class ActiveSlotFragment extends Fragment {
                     assert vEmail != null;
                     if (vEmail.equals(checkMail)) {
 
-                        companyID=ds.child("companyID").getValue(Integer.class);
+                        companyId=ds.child("companyId").getValue(Integer.class);
 
                         slotRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @SuppressLint("SetTextI18n")
@@ -100,7 +105,7 @@ public class ActiveSlotFragment extends Fragment {
 
                                     int slotFlag = ds.child("slotFlag").getValue(Integer.class);
 
-                                    if(slotFlag == companyID) {
+                                    if (slotFlag == companyId) {
 
                                         String id = ds.child("userId").getValue(String.class);
                                         final String email=ds.child("userMail").getValue(String.class);
@@ -238,15 +243,37 @@ public class ActiveSlotFragment extends Fragment {
 
                                                                         modDateArr[i]=dateArr[i];
                                                                     }
+
                                                                     name=ds.child("userName").getValue(String.class);
                                                                     phone=ds.child("userPhone").getValue(String.class);
-                                                                    sendEmail=ds.child("userMail").getValue(String.class);
                                                                     String modTime=String.valueOf(modDateArr) + ", " + stTime + " | " + hours;
-                                                                    Users item=new Users(sendEmail, name, phone, modTime);
-                                                                    users.add(item);
-                                                                    adapter=new CustomListViewAdapter(refActivity, R.layout.list_slot, users);
-                                                                    activeListViewSlot.setAdapter(adapter);
 
+                                                                    final StorageReference mStorageRef=FirebaseStorage.getInstance().getReference();
+                                                                    final StorageReference imgRef=mStorageRef.child(inLoopEmail + "/photo.jpg");
+
+                                                                    /*Toast.makeText(context, getEmailFromSlot, Toast.LENGTH_LONG).show();
+
+                                                                    imgRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                        @Override
+                                                                        public void onSuccess(Uri uri) {
+
+                                                                            getImageUrl=uri.toString();
+
+                                                                        }
+                                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                                        @Override
+                                                                        public void onFailure(@NonNull Exception e) {
+
+
+                                                                        }
+                                                                    });
+
+                                                                    Toast.makeText(getActivity(),"first"+getImageUrl,Toast.LENGTH_LONG).show();
+                                                                    Users item=new Users(inLoopEmail, name, phone, modTime);
+                                                                    users.add(item);
+                                                                    adapter=new CustomListViewAdapter(refActivity, R.layout.list_slot, users, getImageUrl);
+                                                                    activeListViewSlot.setAdapter(adapter);
+                                                                    position ++;*/
                                                                 }
 
                                                             }
@@ -281,14 +308,14 @@ public class ActiveSlotFragment extends Fragment {
                                                 @Override
                                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                                        String inLoopEmail=ds.child("userMail").getValue(String.class);
+                                                    for (final DataSnapshot ds : dataSnapshot.getChildren()) {
+                                                        final String inLoopEmail=ds.child("userMail").getValue(String.class);
 
                                                         assert email != null;
                                                         if (email.equals(inLoopEmail)) {
 
                                                             char[] dateArr=date.toCharArray();
-                                                            char[] modDateArr=new char[date.length()];
+                                                            final char[] modDateArr=new char[date.length()];
                                                             int count=0;
 
                                                             for (int i=0; i < dateArr.length; i++) {
@@ -299,14 +326,37 @@ public class ActiveSlotFragment extends Fragment {
 
                                                                 modDateArr[i]=dateArr[i];
                                                             }
-                                                            name=ds.child("userName").getValue(String.class);
-                                                            phone=ds.child("userPhone").getValue(String.class);
-                                                            sendEmail=ds.child("userMail").getValue(String.class);
-                                                            String modTime=String.valueOf(modDateArr) + ", " + stTime + " | " + hours;
-                                                            Users item=new Users(sendEmail, name, phone, modTime);
-                                                            users.add(item);
-                                                            adapter=new CustomListViewAdapter(refActivity, R.layout.list_slot, users);
-                                                            activeListViewSlot.setAdapter(adapter);
+
+                                                            final StorageReference mStorageRef=FirebaseStorage.getInstance().getReference();
+                                                            final StorageReference imgRef=mStorageRef.child(inLoopEmail + "/photo.jpg");
+
+
+                                                            //Toast.makeText(context, getEmailFromSlot, Toast.LENGTH_LONG).show();
+
+                                                            imgRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                @Override
+                                                                public void onSuccess(Uri uri) {
+
+                                                                    getImageUrl.add(uri.toString());
+                                                                    //Toast.makeText(getActivity(),"second "+getImageUrl,Toast.LENGTH_LONG).show();
+                                                                    name=ds.child("userName").getValue(String.class);
+                                                                    phone=ds.child("userPhone").getValue(String.class);
+                                                                    String modTime=String.valueOf(modDateArr) + ", " + stTime + " | " + hours;
+                                                                    Users item=new Users(inLoopEmail, name, phone, modTime);
+                                                                    users.add(item);
+                                                                    adapter=new CustomListViewAdapter(refActivity, R.layout.list_slot, users, getImageUrl);
+                                                                    activeListViewSlot.setAdapter(adapter);
+
+
+                                                                }
+                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+
+
+                                                                }
+                                                            });
+
 
                                                         }
 
@@ -319,6 +369,8 @@ public class ActiveSlotFragment extends Fragment {
 
                                                 }
                                             });
+
+                                            //pd.dismiss();
                                         }
 
 
@@ -336,12 +388,12 @@ public class ActiveSlotFragment extends Fragment {
 
                         });
 
+                        //pd.dismiss();
                         break;
 
                     }
                 }
 
-                pd.dismiss();
 
             }
 
@@ -362,7 +414,6 @@ public class ActiveSlotFragment extends Fragment {
                 startActivity(it);
             }
         });
-
 
         return parentHolder;
     }

@@ -198,24 +198,22 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
-                    uEmail = ds.child("vendorMail").getValue(String.class);
+                    uEmail=ds.child("vendorMail").getValue(String.class);
 
                     assert uEmail != null;
-                    if(uEmail.equals(checkEmail)) {
-                        uPhone = ds.child("vendorPhone").getValue(String.class);
-                        uName = ds.child("vendorName").getValue(String.class);
+                    if (uEmail.equals(checkEmail)) {
+                        uPhone=ds.child("vendorPhone").getValue(String.class);
+                        uName=ds.child("vendorName").getValue(String.class);
                         isUploadedPhotoFlag=ds.child("vendorPhotoFlag").getValue(Integer.class);
-                        if(isUploadedPhotoFlag == 1)
+                        if (isUploadedPhotoFlag == 1)
                             setImage();
                         pd.dismiss();
 
                         break;
                     }
-
                 }
-
 
                 textViewName=parentHolder.findViewById(R.id.tvName);
                 textViewMail=parentHolder.findViewById(R.id.tvEmail);
@@ -374,7 +372,7 @@ public class ProfileFragment extends Fragment {
                                         assert uEmail != null;
                                         if (uEmail.equals(checkEmail)) {
 
-                                            String id = ds.child("userId").getValue(String.class);
+                                            String id=ds.child("vendorId").getValue(String.class);
                                             assert id != null;
                                             usrRef.child(id).child("vendorPhotoFlag").setValue(1);
                                             break;

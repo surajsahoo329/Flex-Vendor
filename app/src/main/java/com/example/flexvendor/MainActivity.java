@@ -317,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             String vEmail=ds.child("vendorMail").getValue(String.class);
                             assert vEmail != null;
                             if (vEmail.equals(checkEmail)) {
-                                int position=ds.child("companyID").getValue(Integer.class);
+                                int position=ds.child("companyId").getValue(Integer.class);
                                 Intent it=new Intent(MainActivity.this, InformationActivity.class);
 
                                 it.putExtra("flipkart", "0");

@@ -3,7 +3,6 @@ package com.example.flexvendor;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,11 +16,6 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +30,7 @@ public class HistorySlotFragment extends Fragment {
     private String checkMail, vEmail, name, phone, email, date, stTime, hours;
     private ListView historyListViewSlot;
     private CustomListViewAdapter adapter;
-    private int companyID;
+    private int companyId;
 
     private List<Users> users;
 
@@ -55,7 +49,7 @@ public class HistorySlotFragment extends Fragment {
         final Activity refActivity=getActivity();
         final View parentHolder=inflater.inflate(R.layout.fragment_history_slot, container, false);
 
-        final ProgressDialog pd=ProgressDialog.show(refActivity, "Loading slots", "Please wait...", true);
+        //final ProgressDialog pd=ProgressDialog.show(refActivity, "Loading slots", "Please wait...", true);
 
         FirebaseUser vendUser=FirebaseAuth.getInstance().getCurrentUser();
         assert vendUser != null;
@@ -66,7 +60,7 @@ public class HistorySlotFragment extends Fragment {
         users=new ArrayList<>();
 
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        /*final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference ref=database.getReference("History");
         final DatabaseReference vendRef=database.getReference("Vendor");
         final DatabaseReference userRef=database.getReference("User");
@@ -81,7 +75,7 @@ public class HistorySlotFragment extends Fragment {
                     assert vEmail != null;
                     if (vEmail.equals(checkMail)) {
 
-                        companyID=ds.child("companyID").getValue(Integer.class);
+                        companyId=ds.child("companyId").getValue(Integer.class);
 
                         ref.addListenerForSingleValueEvent(new ValueEventListener() {
                             @SuppressLint("SetTextI18n")
@@ -92,7 +86,7 @@ public class HistorySlotFragment extends Fragment {
 
                                     int slotFlag=ds.child("slotFlag").getValue(Integer.class);
 
-                                    if (slotFlag == companyID) {
+                                    if (slotFlag == companyId) {
 
                                         final String email=ds.child("userMail").getValue(String.class);
                                         final String date=ds.child("showDate").getValue(String.class);
@@ -166,7 +160,7 @@ public class HistorySlotFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        });*/
 
 
         return parentHolder;

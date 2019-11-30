@@ -3,35 +3,30 @@ package com.example.flexvendor;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
 public class CustomListViewAdapter extends ArrayAdapter<Users> {
 
     private Context context;
-    String getImageUrl, getEmail;
+    private List<String> getImageUrl;
 
     CustomListViewAdapter(Context context, int resourceId,
-                          List<Users> items) {
+                          List<Users> items, List<String> getImageUrl) {
         super(context, resourceId, items);
         this.context = context;
+        this.getImageUrl=getImageUrl;
     }
 
     @SuppressLint({"InflateParams", "SetTextI18n"})
@@ -61,52 +56,19 @@ public class CustomListViewAdapter extends ArrayAdapter<Users> {
         holder.txtPhone.setText("+91-" + users.getPhone());
         holder.txtTimings.setText(users.getTimings());
         holder.txtEmail.setText(users.getEmail());
-        getEmail=holder.txtEmail.getText().toString().trim();
 
-        final StorageReference mStorageRef=FirebaseStorage.getInstance().getReference();
-        final StorageReference imgRef=mStorageRef.child(getEmail + "/photo.jpg");
-        final long TEN_MEGABYTES=10024 * 10024;
+        //Toast.makeText(context,getImageUrl.get(position),Toast.LENGTH_LONG).show();
 
-        Toast.makeText(context, getEmail, Toast.LENGTH_LONG).show();
-
-        imgRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-
-                getImageUrl=uri.toString();
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-
-
-            }
-        });
-
-        imgRef.getBytes(TEN_MEGABYTES).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-
-                Glide.with(context)
-                        .load(getImageUrl)
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(holder.imageView);
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-
-
-            }
-        });
+        Glide.with(context)
+                .load(getImageUrl.get(position))
+                .apply(RequestOptions.circleCropTransform())
+                .into(holder.imageView);
 
         return convertView;
     }
 
     /*private view holder class*/
-    static class ViewHolder {
+    class ViewHolder {
         ImageView imageView;
         TextView txtEmail;
         TextView txtName;

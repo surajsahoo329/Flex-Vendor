@@ -29,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 public class RegisterActivity extends AppCompatActivity implements ValueEventListener {
 
     private EditText etName, etEmail, etPhone, etCompanyId, etPassword, etConfirmPassword;
+    private int companyId;
     private FirebaseAuth auth;
     private DatabaseReference databaseUser;
     private DatabaseReference databaseFeedback;
@@ -74,7 +75,7 @@ public class RegisterActivity extends AppCompatActivity implements ValueEventLis
                 String companyIdString = etCompanyId.getText().toString().trim();
                 String password = etPassword.getText().toString().trim();
                 String confirmPassword = etConfirmPassword.getText().toString().trim();
-                int companyId = Integer.parseInt(companyIdString);
+                companyId=Integer.parseInt(companyIdString);
 
                 if(name.length()==0) {
                     Snackbar snackbar = Snackbar.make(parentLayout, "Please enter your name ", Snackbar.LENGTH_LONG)
@@ -252,7 +253,7 @@ public class RegisterActivity extends AppCompatActivity implements ValueEventLis
         final String mail=etEmail.getText().toString().trim();
         final String phone=etPhone.getText().toString().trim();
         final String password=etPassword.getText().toString().trim();
-        final int companyID = 0, PhotoFlag = 0;
+        final int companyId=0, PhotoFlag=0;
 
 
         final ProgressDialog pd=ProgressDialog.show(RegisterActivity.this, "Creating account", "Please wait", true);
@@ -281,7 +282,7 @@ public class RegisterActivity extends AppCompatActivity implements ValueEventLis
 
                                 pd.dismiss();
                                 String id = databaseUser.push().getKey();
-                                Vendor vendor=new Vendor(id, name, mail, phone, companyID, PhotoFlag);
+                                Vendor vendor=new Vendor(id, name, mail, phone, companyId, PhotoFlag);
                                 assert id != null;
                                 databaseUser.child(id).setValue(vendor);
                                 registerFlag = 1;
