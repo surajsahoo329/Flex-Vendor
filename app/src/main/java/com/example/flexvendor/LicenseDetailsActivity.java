@@ -68,7 +68,7 @@ public class LicenseDetailsActivity extends AppCompatActivity {
         tvExpiryDate=findViewById(R.id.tvExpiryDate);
 
 
-        DatabaseReference dlRef=dbRef.child("DL");
+        DatabaseReference dlRef=dbRef.child("DrivingLicense");
 
         ValueEventListener dlListener=new ValueEventListener() {
             @Override

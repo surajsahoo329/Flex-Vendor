@@ -96,7 +96,7 @@ public class DeleteAccountActivity extends AppCompatActivity {
         usrRef=dbRef.child("Vendor");
         fdbRef=dbRef.child("Feedback");
         slotRef=dbRef.child("Slot");
-        dlRef=dbRef.child("DL");
+        dlRef=dbRef.child("DrivingLicense");
         hisRef=dbRef.child("History");
 
         btnDeleteAccount.setOnClickListener(new View.OnClickListener() {
