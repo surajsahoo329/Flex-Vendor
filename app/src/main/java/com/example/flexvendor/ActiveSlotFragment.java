@@ -109,7 +109,7 @@ public class ActiveSlotFragment extends Fragment {
 
                                     if (slotFlag == companyId) {
 
-                                        String id = ds.child("userId").getValue(String.class);
+                                        String id=ds.child("slotId").getValue(String.class);
                                         final String email=ds.child("userMail").getValue(String.class);
                                         final String date=ds.child("showDate").getValue(String.class);
                                         final String stTime=ds.child("showStartTime").getValue(String.class);
