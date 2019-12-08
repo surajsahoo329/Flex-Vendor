@@ -73,21 +73,6 @@
         android:layout_width="match_parent"
         android:layout_height="20dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textColor="#000"
-        android:text="@string/gyaneswar_singh" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textColor="#000"
-        android:text="@string/sahil_kumar_nayak" />
 
     <TextView
         android:layout_width="match_parent"
@@ -96,15 +81,6 @@
         android:layout_marginRight="20dp"
         android:textColor="#000"
         android:text="@string/suraj_kumar_sahoo" />
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textColor="#000"
-        android:text="@string/sudhansu_sekhar_sahoo" />
 
 
     <TextView

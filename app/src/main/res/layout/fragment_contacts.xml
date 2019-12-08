@@ -123,35 +123,6 @@
             android:textStyle="bold" />
 
 
-        <TextView
-        android:id="@+id/tvPhone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textColor="#000"
-            android:text="@string/_91_7008825084" />
-
-
-            <TextView
-        android:id="@+id/tvAltPhone1"
-                android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-        android:textColor="#000"
-                android:text="@string/_91_9348075636"
-        />
-
-    <TextView
-        android:id="@+id/tvAltPhone2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textColor="#000"
-        android:text="@string/_91_9937340986"
-        />
 
     <TextView
         android:id="@+id/tvAltPhone3"
@@ -172,35 +143,6 @@
             android:text="@string/email"
             android:textColor="#000"
             android:textStyle="bold" />
-
-        <TextView
-        android:id="@+id/tvEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textColor="#000"
-            android:text="@string/hapi181096_gmail_com" />
-
-   <TextView
-        android:id="@+id/tvAltEmail1"
-       android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-       android:layout_marginLeft="20dp"
-       android:layout_marginRight="20dp"
-        android:textColor="#000"
-       android:text="@string/sahilnayak101_gmail_com"
-         />
-
-    <TextView
-        android:id="@+id/tvAltEmail2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textColor="#000"
-        android:text="@string/gyaneswarsingh53_gmail_com"
-        />
 
     <TextView
         android:id="@+id/tvAltEmail3"
