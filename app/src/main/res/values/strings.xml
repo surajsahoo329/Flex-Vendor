@@ -124,5 +124,6 @@
     <string name="users">Company</string>
     <string name="courier">Courier</string>
     <string name="your_company">Your Company</string>
+    <string name="app_version_1_0_0">App Version 1.0.0</string>
 </resources>
 
